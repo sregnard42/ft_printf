@@ -6,24 +6,15 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:26:00 by sregnard          #+#    #+#             */
-/*   Updated: 2019/01/27 18:09:42 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/01/30 15:20:14 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "ft_printf.h"
+#include "includes/ft_printf.h"
 #include <stdio.h>
 
 int	main(int ac, char **av)
 {
-	int	i;
-
-	i = 0;
-	--ac;
-	while (i < ac)
-	{
-		ft_printf(av[++i]);
-		printf("%s", av[i]);
-	}
+	ft_printf("Hello there\n");
 	return (0);
 }

@@ -1,26 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_putchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/27 17:20:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/01/30 15:39:20 by sregnard         ###   ########.fr       */
+/*   Created: 2019/01/30 15:31:50 by sregnard          #+#    #+#             */
+/*   Updated: 2019/01/30 15:36:18 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
+#include <unistd.h>
 
-#include <stdlib.h>
-#include <stdarg.h>
-
-int	ft_printf(const char *format, ...);
-
-int ft_putchar(char c);
-int	ft_putstr(char *s);
-int	ft_putaddr(void *p);
-
-int	ft_strlen(char *s);
-
-#endif
+int	ft_putchar(char c)
+{
+	return (write(1, &c, 1));
+}
