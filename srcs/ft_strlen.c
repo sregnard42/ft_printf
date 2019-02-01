@@ -6,11 +6,11 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/30 15:37:10 by sregnard          #+#    #+#             */
-/*   Updated: 2019/01/30 15:38:58 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/01/31 18:09:47 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_strlen(char *s)
+int	ft_strlen(const char *s)
 {
 	int	len;
 
