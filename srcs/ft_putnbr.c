@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 18:22:00 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/01 14:36:46 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/01 18:13:29 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,13 @@ int	ft_putbase(unsigned int nb)
 
 int	ft_putnbr_u(unsigned int nbr, unsigned int base)
 {
+	int	i;
+
+	i = 0;
 	if (nbr >= base)
-		ft_putnbr_u(nbr / base, base);
-	return (ft_putbase(nbr % base));
+		i += ft_putnbr_u(nbr / base, base);
+	i += ft_putbase(nbr % base);
+	return (i);
 }
 
 int	ft_putnbr(int nbr, unsigned int base)

@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:23:36 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/01 15:38:49 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/01 18:12:26 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	conversion(const char *format, va_list ap)
 	if (*format == '%')
 		return (ft_putchar(*format));
 	if (*format == 'c')
-		return (ft_putchar(va_arg(ap, int)));
+		return (ft_putchar(va_arg(ap, unsigned int)));
 	if (*format == 's')
 		return (ft_putstr(va_arg(ap, char *)));
 	if (*format == 'p')
@@ -41,21 +41,21 @@ static int	conversion(const char *format, va_list ap)
 
 int			ft_printf(const char *format, ...)
 {
-	va_list ap;
-	int 	i;
+	va_list	ap;
+	int	i;
 
-	va_start(ap, format);
 	i = 0;
+	va_start(ap, format);
 	while (format && *format)
 	{
 		while (format && *format && *format != '%')
-			ft_putchar(*format++);
-		if (*format == '%')
+			i += ft_putchar(*format++);
+		if (format && *format && *format == '%')
 		{
-			conversion(++format, ap);
+			i += conversion(++format, ap);
 			++format;
 		}
 	}
 	va_end(ap);
-	return (0);
+	return (i);
 }

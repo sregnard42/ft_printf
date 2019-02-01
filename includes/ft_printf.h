@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:20:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/01 14:54:51 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/01 17:25:26 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,11 @@
 
 int	ft_printf(const char *format, ...);
 
-int ft_putchar(const char c);
+int	ft_strlen(const char *s);
+int 	ft_putchar(const char c);
 int	ft_putstr(const char *s);
 int	ft_putnbr(int nbr, unsigned int base);
 int	ft_putnbr_u(unsigned int nbr, unsigned int base);
 int	ft_putaddr(unsigned int p);
-
-int	ft_strlen(const char *s);
 
 #endif
