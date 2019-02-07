@@ -6,23 +6,22 @@
 #    By: sregnard <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/07 14:51:18 by sregnard          #+#    #+#              #
-#    Updated: 2019/02/05 16:03:10 by sregnard         ###   ########.fr        #
+#    Updated: 2019/02/07 16:17:34 by sregnard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			=	libftprintf.a
+LIBFT			=	libft/libft.a
 
-HEADDIR			=	includes/
-HEADERS			=	-I $(HEADDIR)
+HEADERS			=	-I includes/
+HEADERS			+=	-I libft/includes/
 
 SRCDIR			=	srcs/
 SRCNAME			= 	ft_printf.c \
 					pf_parse_args.c \
-					pf_strlen.c \
 					pf_putchar.c \
 					pf_putstr.c \
 					pf_putnbr.c \
-					pf_atoi.c \
 					pf_putaddr.c
 SRC				=	$(addprefix $(SRCDIR), $(SRCNAME))
 
@@ -31,13 +30,15 @@ OBJ				=	$(SRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
 	
 CC				=	gcc	
 CFLAGS			=	-Wall -Wextra -Werror
-XFLAGS			=	
+XFLAGS			=	-g3 -g
 
-all				:	$(OBJDIR) $(NAME)
+all				:	$(NAME)
 
-$(NAME)			:	$(OBJ)
-	ar rcs $@ $(OBJ)
-	  
+$(NAME)			:	$(OBJDIR) $(OBJ)
+	make -C libft/			 
+	cp $(LIBFT) $(NAME)
+	ar rcs $(NAME) $(OBJ)
+		   
 $(OBJDIR)		:
 	mkdir -p $(OBJDIR)
 
@@ -45,10 +46,13 @@ $(OBJDIR)%.o	:	$(SRCDIR)%.c
 	$(CC) $(CFLAGS) $(HEADERS) -o $@ -c $^
 
 clean			:	
-	rm -rf $(OBJDIR)*.o
+	rm -rf $(OBJ)
+	rm -rf $(OBJDIR)
+	make clean -C libft/ 
 
 fclean			:	clean
 	rm -rf $(NAME)
+	make fclean -C libft/ 
 
 re				: fclean all
 
