@@ -1,41 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr.c                                        :+:      :+:    :+:   */
+/*   pf_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 18:22:00 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/01 18:13:29 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/05 18:14:02 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_putbase(unsigned int nb)
+int	pf_putbase(unsigned int nb, short up)
 {
 	if (nb < 10)
-		return (ft_putchar(nb + '0'));
-	return (ft_putchar(nb - 10 + 'a'));
+		return (pf_putchar(nb + '0'));
+	return (pf_putchar(nb - 10 + 'a' + up * ('A' - 'a')));
 }
 
-int	ft_putnbr_u(unsigned int nbr, unsigned int base)
+int	pf_putnbr_u(unsigned int nbr, unsigned int base, short up)
 {
 	int	i;
 
 	i = 0;
 	if (nbr >= base)
-		i += ft_putnbr_u(nbr / base, base);
-	i += ft_putbase(nbr % base);
+		i += pf_putnbr_u(nbr / base, base, up);
+	i += pf_putbase(nbr % base, up);
 	return (i);
 }
 
-int	ft_putnbr(int nbr, unsigned int base)
+int	pf_putnbr(int nbr, unsigned int base, short up)
 {
 	unsigned int	nb;
 
 	if (nbr < 0)
-		ft_putchar('-');
+		pf_putchar('-');
 	nb = nbr > 0 ? nbr : -nbr;
-	return (ft_putnbr_u(nb, base));
+	return (pf_putnbr_u(nb, base, up));
 }

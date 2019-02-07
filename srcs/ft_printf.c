@@ -6,56 +6,32 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:23:36 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/01 18:12:26 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/05 17:46:26 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <unistd.h>
-
-static int	flag(const char *format, va_list ap)
-{
-	if (*format == 'l' && *(format + 1) == 'x')
-		return (ft_putaddr(va_arg(ap, unsigned int)));
-	return (-1);
-}
-
-static int	conversion(const char *format, va_list ap)
-{
-	if (*format == '%')
-		return (ft_putchar(*format));
-	if (*format == 'c')
-		return (ft_putchar(va_arg(ap, unsigned int)));
-	if (*format == 's')
-		return (ft_putstr(va_arg(ap, char *)));
-	if (*format == 'p')
-		return (ft_putaddr(va_arg(ap, unsigned int)));
-	if (*format == 'o')
-		return (ft_putnbr_u(va_arg(ap, unsigned int), 8));
-	if (*format == 'x')
-		return (ft_putnbr_u(va_arg(ap, unsigned int), 16));
-	if (*format == '#')
-		return (flag(++format, ap));
-	return (-1);
-}
 
 int			ft_printf(const char *format, ...)
 {
-	va_list	ap;
-	int	i;
+	t_printf	p;
+	size_t		len;
 
-	i = 0;
-	va_start(ap, format);
-	while (format && *format)
+	p.written = 0;
+	p.format = (char *)format;
+	va_start(p.ap, format);
+	while (p.format && *p.format)
 	{
-		while (format && *format && *format != '%')
-			i += ft_putchar(*format++);
-		if (format && *format && *format == '%')
+		len = pf_strlen_until(p.format, '%');
+		p.written += write(1, p.format, len);
+		p.format += len;
+		if (p.format && *p.format && *p.format == '%')
 		{
-			i += conversion(++format, ap);
-			++format;
+			p.written += pf_parse_args(&p);
+			if (p.format && *p.format)
+				++(p.format);
 		}
 	}
-	va_end(ap);
-	return (i);
+	va_end(p.ap);
+	return (p.written);
 }

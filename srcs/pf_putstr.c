@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   pf_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/30 15:37:10 by sregnard          #+#    #+#             */
-/*   Updated: 2019/01/31 18:09:47 by sregnard         ###   ########.fr       */
+/*   Created: 2019/01/31 18:06:57 by sregnard          #+#    #+#             */
+/*   Updated: 2019/02/04 17:57:49 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_strlen(const char *s)
-{
-	int	len;
+#include <unistd.h>
+#include "ft_printf.h"
 
-	len = 0;
-	while (s && s[len])
-		len += 1;
-	return (len);
+int	pf_putstr(const char *s)
+{
+	return (write(1, s, pf_strlen(s)));
 }

@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   pf_putaddr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/31 18:06:57 by sregnard          #+#    #+#             */
-/*   Updated: 2019/01/31 18:08:57 by sregnard         ###   ########.fr       */
+/*   Created: 2019/01/31 18:09:59 by sregnard          #+#    #+#             */
+/*   Updated: 2019/02/05 18:11:28 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include "ft_printf.h"
 
-int	ft_putstr(const char *s)
+int	pf_putaddr(unsigned int p)
 {
-	return (write(1, s, ft_strlen(s)));
+	return (pf_putnbr_u(p, 16, 0));
 }

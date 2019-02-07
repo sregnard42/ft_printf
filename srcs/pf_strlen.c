@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putaddr.c                                       :+:      :+:    :+:   */
+/*   pf_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/31 18:09:59 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/01 14:54:10 by sregnard         ###   ########.fr       */
+/*   Created: 2019/01/30 15:37:10 by sregnard          #+#    #+#             */
+/*   Updated: 2019/02/04 17:57:59 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-
-int	ft_putaddr(unsigned int p)
+int	pf_strlen_until(const char *s, char c)
 {
-	return (ft_putnbr_u(p, 16));
+	const char	*start = s;
+	
+	while (s && *s && *s != c)
+		++s;
+	return (s - start);
+}
+
+int	pf_strlen(const char *s)
+{
+	return (pf_strlen_until(s, '\0'));
 }
