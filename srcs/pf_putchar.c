@@ -6,13 +6,13 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/30 15:31:50 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/04 17:57:31 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/07 15:40:37 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "ft_printf.h"
 
-int	pf_putchar(const char c)
+int	pf_putchar(t_printf *p, const char c)
 {
-	return (write(1, &c, 1));
+	return (pf_buffer(p, &c, 1));
 }

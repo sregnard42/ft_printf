@@ -6,21 +6,25 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:20:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/07 12:46:49 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/07 14:57:03 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 
+#include "../libft/includes/libft.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdarg.h>
 
+#define PF_BUFF_SIZE	256
+
 typedef struct	s_printf
 {
-	char		buf[1024];
 	char		*format;
 	va_list		ap;
+	char		buf[PF_BUFF_SIZE];
+	unsigned int	index;
 	unsigned int	flags;
 	unsigned int	width;
 	unsigned int	precision;
@@ -51,14 +55,15 @@ int	ft_printf(const char *format, ...);
 **	pf_parse_args
 */
 
+int	pf_buffer(t_printf *p, const char *s, size_t len);
 int	pf_parse_args(t_printf *p);
 int	pf_strlen_until(const char *s, char c);
 int	pf_strlen(const char *s);
-int 	pf_putchar(const char c);
-int	pf_putstr(const char *s);
+int 	pf_putchar(t_printf *p, const char c);
+int	pf_putstr(t_printf *p, const char *s);
 int	pf_atoi(const char *s);
-int	pf_putnbr(int nbr, unsigned int base, short up);
-int	pf_putnbr_u(unsigned int nbr, unsigned int base, short up);
-int	pf_putaddr(unsigned int p);
+int	pf_putnbr(t_printf *p, int nbr, unsigned int base, short up);
+int	pf_putnbr_u(t_printf *p, unsigned int nbr, unsigned int base, short up);
+int	pf_putaddr(t_printf *p, unsigned int addr);
 
 #endif
