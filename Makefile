@@ -30,7 +30,7 @@ OBJ				=	$(SRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
 	
 CC				=	gcc	
 CFLAGS			=	-Wall -Wextra -Werror
-XFLAGS			=	-g3 -g
+XFLAGS			=
 
 all				:	$(NAME)
 
