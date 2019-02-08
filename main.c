@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:26:00 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/08 16:14:57 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/08 17:35:18 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 int	main(int ac, char **av)
 {
 	printf("printf :\n");
-	printf("%d", -347);
+	printf("| %10d |", -347);
 	printf("\n");
 	printf("ft_printf :\n");
-	ft_printf("%d", -347);
+	ft_printf("| %10d |", -347);
 	printf("\n");
 	
 	printf("\n");
