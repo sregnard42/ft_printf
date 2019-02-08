@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 15:48:27 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/07 15:45:01 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/08 16:10:54 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,20 @@ static int	conversion(t_printf *p)
 		return (pf_putstr(p, va_arg(p->ap, char *)));
 	if (*p->format == 'p')
 		return (pf_putaddr(p, va_arg(p->ap, unsigned int)));
-	if (*p->format == 'd')
-		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 10, 0));
-	if (*p->format == 'i')
-		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 10, 0));
+	if (*p->format == 'd' || *p->format == 'i')
+		return (pf_putnbr(p, va_arg(p->ap, int), 10));
 	if (*p->format == 'o')
-		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 8, 0));
+		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 8));
 	if (*p->format == 'u')
-		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 10, 0));
+		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 10));
 	if (*p->format == 'x')
-		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 16, 0));
+		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 16));
 	if (*p->format == 'X')
-		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 16, 1));
+		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 16));
 	if (*p->format == 'f')
-		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 10, 0));
+		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 10));
 	if (*p->format == '%')
-		return (pf_buffer(p, (p->format), 1));
+		return (pf_putchar(p, '%'));
 	return (0);
 }
 
@@ -104,6 +102,8 @@ static int	options(t_printf *p)
 
 int		pf_parse_args(t_printf *p)
 {
+	unsigned int	ret;
+
 	p->flags = 0;
 	p->width = 0;
 	p->precision = 1;
@@ -114,9 +114,10 @@ int		pf_parse_args(t_printf *p)
 		++(p->format);
 	width_precision(p);
 	flags(p);
-	p->width -= (conversion(p));
+	ret = (conversion(p));
+	p->width = p->width < ret ? 0 : p->width - ret;
 	if (p->flags & FLAG_LEFT_ALIGN)
-		while (p->width--)
+		while (p->width-- > 0)
 			pf_putchar(p, ' ');
 	return (1);
 }
