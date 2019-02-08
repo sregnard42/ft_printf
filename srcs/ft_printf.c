@@ -6,11 +6,28 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:23:36 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/07 14:28:42 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/08 17:55:50 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+int	pf_padding(t_printf *p, size_t len)
+{
+	char	c;
+
+	c = ' ';
+	if (p->flags & FLAG_LEFT_ALIGN)
+	{
+		while (p->width--)
+			pf_buffer(p, &c, 1);
+		return (1);
+	}
+	c = p->flags & FLAG_0 ? '0' : ' ';
+	while (p->width-- > len)
+		pf_buffer(p, &c, 1);
+	return (1);
+}
 
 int		pf_buffer(t_printf *p, const char *s, size_t len)
 {

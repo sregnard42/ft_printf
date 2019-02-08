@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pf_putnbr.c                                        :+:      :+:    :+:   */
+/*   pf_numbers.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/31 18:22:00 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/08 16:15:33 by sregnard         ###   ########.fr       */
+/*   Created: 2019/02/08 17:56:54 by sregnard          #+#    #+#             */
+/*   Updated: 2019/02/08 17:57:54 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	pf_putbase(t_printf *p, unsigned int nb)
+static int	pf_putbase(t_printf *p, unsigned int nb)
 {
 	if (nb < 10)
 		return (pf_putchar(p, nb + '0'));
@@ -21,7 +21,7 @@ int	pf_putbase(t_printf *p, unsigned int nb)
 	return (pf_putchar(p, nb - 10 + 'a'));
 }
 
-int	pf_putnbr_u(t_printf *p, unsigned int nbr, unsigned int base)
+int		pf_putnbr_u(t_printf *p, unsigned int nbr, unsigned int base)
 {
 	int	i;
 
@@ -32,7 +32,7 @@ int	pf_putnbr_u(t_printf *p, unsigned int nbr, unsigned int base)
 	return (i);
 }
 
-int	pf_putnbr(t_printf *p, int nbr, unsigned int base)
+int		pf_putnbr(t_printf *p, int nbr, unsigned int base)
 {
 	unsigned int	nb;
 
@@ -45,3 +45,9 @@ int	pf_putnbr(t_printf *p, int nbr, unsigned int base)
 	nb = nbr;
 	return (pf_putnbr_u(p, nb, base));
 }
+
+int	pf_putaddr(t_printf *p, unsigned int addr)
+{
+	return (pf_putnbr_u(p, addr, 16));
+}
+

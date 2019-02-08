@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 15:48:27 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/08 16:10:54 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/08 17:46:19 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static int	options(t_printf *p)
 	if (*p->format == '-') 
 		return (p->flags |= FLAG_LEFT_ALIGN);
 	if (*p->format == '0')
-		return (p->flags |= FLAG_RIGHT_ALIGN);
+		return (p->flags |= FLAG_0);
 	return (0);
 }
 
@@ -117,7 +117,7 @@ int		pf_parse_args(t_printf *p)
 	ret = (conversion(p));
 	p->width = p->width < ret ? 0 : p->width - ret;
 	if (p->flags & FLAG_LEFT_ALIGN)
-		while (p->width-- > 0)
+		while (p->width--)
 			pf_putchar(p, ' ');
 	return (1);
 }
