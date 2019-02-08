@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:23:36 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/08 17:55:50 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/08 18:54:38 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,17 @@ int	pf_padding(t_printf *p, size_t len)
 	c = ' ';
 	if (p->flags & FLAG_LEFT_ALIGN)
 	{
-		while (p->width--)
+		if (len != 0)
+			return (1);
+		while (p->width-- > 0)
 			pf_buffer(p, &c, 1);
+		p->width = 0;
 		return (1);
 	}
 	c = p->flags & FLAG_0 ? '0' : ' ';
 	while (p->width-- > len)
 		pf_buffer(p, &c, 1);
+	p->width = 0;
 	return (1);
 }
 
@@ -56,7 +60,7 @@ int			ft_printf(const char *format, ...)
 	va_start(p.ap, format);
 	while (p.format && *p.format)
 	{
-		
+
 		while (p.format && *p.format && *p.format != '%')
 			p.buf[p.index++] = *p.format++;
 		if (p.format && *p.format && *p.format == '%')
