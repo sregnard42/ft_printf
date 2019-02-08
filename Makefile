@@ -6,7 +6,7 @@
 #    By: sregnard <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/07 14:51:18 by sregnard          #+#    #+#              #
-#    Updated: 2019/02/07 16:17:34 by sregnard         ###   ########.fr        #
+#    Updated: 2019/02/08 18:01:43 by sregnard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,21 +18,19 @@ HEADERS			+=	-I libft/includes/
 
 SRCDIR			=	srcs/
 SRCNAME			= 	ft_printf.c \
-					pf_parse_args.c \
-					pf_putchar.c \
-					pf_putstr.c \
-					pf_putnbr.c \
-					pf_putaddr.c
-SRC				=	$(addprefix $(SRCDIR), $(SRCNAME))
+				pf_args.c \
+				pf_numbers.c \
+				pf_chars.c
+SRC			=	$(addprefix $(SRCDIR), $(SRCNAME))
 
 OBJDIR			=	objs/
-OBJ				=	$(SRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
+OBJ			=	$(SRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
 	
-CC				=	gcc	
+CC			=	gcc	
 CFLAGS			=	-Wall -Wextra -Werror
 XFLAGS			=
 
-all				:	$(NAME)
+all			:	$(NAME)
 
 $(NAME)			:	$(OBJDIR) $(OBJ)
 	make -C libft/			 
@@ -42,7 +40,7 @@ $(NAME)			:	$(OBJDIR) $(OBJ)
 $(OBJDIR)		:
 	mkdir -p $(OBJDIR)
 
-$(OBJDIR)%.o	:	$(SRCDIR)%.c
+$(OBJDIR)%.o		:	$(SRCDIR)%.c
 	$(CC) $(CFLAGS) $(HEADERS) -o $@ -c $^
 
 clean			:	
@@ -54,6 +52,6 @@ fclean			:	clean
 	rm -rf $(NAME)
 	make fclean -C libft/ 
 
-re				: fclean all
+re			:	fclean all
 
 .PHONY			:	all clean fclean re
