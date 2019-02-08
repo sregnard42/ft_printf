@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:20:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/07 16:27:39 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/08 16:12:16 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ int	pf_strlen(const char *s);
 int 	pf_putchar(t_printf *p, const char c);
 int	pf_putstr(t_printf *p, const char *s);
 int	pf_atoi(const char *s);
-int	pf_putnbr(t_printf *p, int nbr, unsigned int base, short up);
-int	pf_putnbr_u(t_printf *p, unsigned int nbr, unsigned int base, short up);
+int	pf_putnbr(t_printf *p, int nbr, unsigned int base);
+int	pf_putnbr_u(t_printf *p, unsigned int nbr, unsigned int base);
 int	pf_putaddr(t_printf *p, unsigned int addr);
 
 #endif
