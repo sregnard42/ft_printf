@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:20:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/08 17:58:21 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/09 16:06:38 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 **	----------------------------------------------------------------------
 */
 
-typedef struct	s_printf
+typedef struct		s_printf
 {
 	char		*format;
 	va_list		ap;
@@ -33,7 +33,7 @@ typedef struct	s_printf
 	unsigned int	width;
 	unsigned int	precision;
 	unsigned int	written;
-}		t_printf;
+}			t_printf;
 
 /*
 **	----------------------------------------------------------------------
@@ -41,11 +41,11 @@ typedef struct	s_printf
 
 enum	e_printf_flags
 {
-	FLAG_HASH = (1 << 0),
-	FLAG_PLUS = (1 << 1),
-	FLAG_SPACE = (1 << 2),
-	FLAG_LEFT_ALIGN = (1 << 3),
-	FLAG_0 = (1 << 4),
+	FLAG_0 = (1 << 0),
+	FLAG_LEFT_ALIGN = (1 << 2),
+	FLAG_PLUS = (1 << 3),
+	FLAG_SPACE = (1 << 4),
+	FLAG_HASH = (1 << 4),
 	FLAG_WIDTH = (1 << 5),
 	FLAG_PRECISION = (1 << 6),
 	FLAG_CHAR = (1 << 7),
@@ -55,6 +55,8 @@ enum	e_printf_flags
 	FLAG_FLOAT = (1 << 11),
 	FLAG_DOUBLE = (1 << 12),
 	FLAG_LONG_DOUBLE = (1 << 13),
+	FLAG_NEGATIVE = (1 << 14),
+	FLAG_POSITIVE = (1 << 15),
 };
 
 /*
@@ -82,9 +84,8 @@ int	pf_putstr(t_printf *p, const char *s);
 **	----------------------------------------------------------------------
 */
 
-int	pf_putaddr(t_printf *p, unsigned int addr);
-int	pf_putnbr(t_printf *p, int nbr, unsigned int base);
-int	pf_putnbr_u(t_printf *p, unsigned int nbr, unsigned int base);
+int	pf_nb_signed(t_printf *p, long long nbr, unsigned int base);
+int	pf_nb_unsigned(t_printf *p, unsigned long long nbr, unsigned int base);
 
 /*
 **	----------------------------------------------------------------------
