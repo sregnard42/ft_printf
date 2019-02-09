@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:23:36 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/08 18:54:38 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/09 17:12:40 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ int	pf_padding(t_printf *p, size_t len)
 	{
 		if (len != 0)
 			return (1);
-		while (p->width-- > 0)
+		while (p->width > 0)
 			pf_buffer(p, &c, 1);
 		p->width = 0;
 		return (1);
 	}
 	c = p->flags & FLAG_0 ? '0' : ' ';
-	while (p->width-- > len)
+	while (p->width > len)
 		pf_buffer(p, &c, 1);
 	p->width = 0;
 	return (1);
@@ -45,7 +45,10 @@ int		pf_buffer(t_printf *p, const char *s, size_t len)
 		p->index = 0;
 	}
 	while (i < len && i < PF_BUFF_SIZE)
+	{
 		p->buf[p->index++] = *(s + i++);
+		p->width > 0 ? --p->width : 0;
+	}
 	if (i < len)
 		pf_buffer(p, s + i, len - i);
 	return (len);	

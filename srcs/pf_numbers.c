@@ -6,87 +6,85 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 17:56:54 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/08 21:45:41 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/09 18:04:12 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static size_t	pf_nbrpad(unsigned int nbr, unsigned int base)
+static int	pf_nbrlen(t_printf *p, unsigned long long nb, unsigned int base)
 {
-	size_t	len;
+	size_t		len;
 
 	len = 1;
-	while (nbr >= base && ++len)
-		nbr /= base;
+	if (!(p->flags & FLAG_LEFT_ALIGN) && !(p->flags & FLAG_0)
+			&& (p->flags & FLAG_NEGATIVE
+			|| (p->flags & FLAG_POSITIVE && p->flags & FLAG_PLUS)))
+		++len;
+	while (nb >= base && ++len)
+		nb /= base;
 	return (len);
 }
 
-static char	pf_putbase(t_printf *p, unsigned int nb)
+static int	pf_putnbr(t_printf *p, unsigned long long nb, unsigned int base)
 {
-	if (nb < 10)
-		return (nb + '0');
-	if (*p->format == 'X')
-		return (nb - 10 + 'A');
-	return (nb - 10 + 'a');
-}
-
-int		pf_putnbr_u(t_printf *p, unsigned int nbr, unsigned int base)
-{
-	int	i;
 	char	c;
-	size_t	len;
 
-	if (!(p->flags & FLAG_LEFT_ALIGN))
-	{
-		len = pf_nbrpad(nbr, base);
-		pf_padding(p, len);
-	}
-	i = 0;
-	if (nbr >= base)
-		i += pf_putnbr_u(p, nbr / base, base);
-	c = pf_putbase(p, nbr % base);
-	i += pf_buffer(p, &c, 1);
-	return (i);
+	if (nb >= base)
+		pf_putnbr(p, nb / base, base);
+	nb %= base;
+	if (nb < 10)
+		c = nb + '0';
+	else if (*p->format == 'X')
+		c = nb - 10 + 'A';
+	else
+		c = nb - 10 + 'a';
+	pf_buffer(p, &c, 1);
+	nb /= base;
+	if (p->flags & FLAG_LEFT_ALIGN)
+		return (pf_nbrlen(p, nb, base));
+	return (0);
 }
 
-int		pf_putnbr(t_printf *p, int nbr, unsigned int base)
+static int	pf_nbrpad(t_printf *p, unsigned long long nb, unsigned int base)
 {
-	unsigned int	nb;
+	char c;
 
-	(nbr < 0) ? (nb = -nbr) : (nb = nbr);
+	c = 0;
+	if (p->flags & FLAG_NEGATIVE)
+		c = '-';
+	else if (p->flags & FLAG_POSITIVE && p->flags & FLAG_PLUS)
+		c = '+';
+	else if (p->flags & FLAG_POSITIVE && p->flags & FLAG_SPACE)
+		c = ' ';
 	if (p->flags & FLAG_LEFT_ALIGN)
-	{
-		(nbr < 0) ? pf_buffer(p, "-", 1) : 0;
-		(p->flags & FLAG_PLUS) && nbr >= 0 ? pf_buffer(p, "+", 1) : 0;
-		if (((p->flags & FLAG_PLUS) && nbr >= 0) || nbr < 0)
-			p->width > 0 ? --p->width : 0;
-	}
+		c != 0 ? pf_buffer(p, &c, 1) : 0;
 	else if (p->flags & FLAG_0)
 	{
-		(nbr < 0) ? pf_buffer(p, "-", 1) : 0;
-		(p->flags & FLAG_PLUS) && nbr >= 0 ? pf_buffer(p, "+", 1) : 0;
-		if (((p->flags & FLAG_PLUS) && nbr >= 0) || nbr < 0)
-		{
-			p->width > 0 ? --p->width : 0;
-			pf_padding(p, pf_nbrpad(nb, base));
-		}
+		c != 0 ? pf_buffer(p, &c, 1) : 0;
+		pf_padding(p, pf_nbrlen(p, nb, base));
 	}
 	else
 	{
-		if (((p->flags & FLAG_PLUS) && nbr >= 0) || nbr < 0)
-		{
-			p->width > 0 ? --p->width : 0;
-			pf_padding(p, pf_nbrpad(nb, base));
-		}
-		(nbr < 0) ? pf_buffer(p, "-", 1) : 0;
-		(p->flags & FLAG_PLUS) && nbr >= 0 ? pf_buffer(p, "+", 1) : 0;
+		pf_padding(p, pf_nbrlen(p, nb, base));
+		c != 0 && c != ' ' ? pf_buffer(p, &c, 1) : 0;
 	}
-	return (pf_putnbr_u(p, nb, base));
+	return (0);
 }
 
-int		pf_putaddr(t_printf *p, unsigned int addr)
+int		pf_nb_signed(t_printf *p, long long nbr, unsigned int base)
 {
-	return (pf_putnbr_u(p, addr, 16));
+	unsigned long long	nb;
+
+	nb = nbr >= 0 ? nbr : -nbr;	
+	p->flags |= nbr >= 0 ? FLAG_POSITIVE : FLAG_NEGATIVE;
+	pf_nbrpad(p, nb, base);
+	return (pf_putnbr(p, nb, base));
 }
 
+int		pf_nb_unsigned(t_printf *p, unsigned long long nb,
+		unsigned int base)
+{
+	pf_nbrpad(p, nb, base);
+	return (pf_putnbr(p, nb, base));
+}

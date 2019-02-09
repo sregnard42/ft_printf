@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 15:48:27 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/08 18:43:37 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/09 17:16:41 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,17 @@ static int	conversion(t_printf *p)
 	if (*p->format == 's')
 		return (pf_putstr(p, va_arg(p->ap, char *)));
 	if (*p->format == 'p')
-		return (pf_putaddr(p, va_arg(p->ap, unsigned int)));
+		return (pf_nb_unsigned(p, va_arg(p->ap, unsigned int), 16));
 	if (*p->format == 'd' || *p->format == 'i')
-		return (pf_putnbr(p, va_arg(p->ap, int), 10));
+		return (pf_nb_signed(p, va_arg(p->ap, int), 10));
 	if (*p->format == 'o')
-		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 8));
+		return (pf_nb_unsigned(p, va_arg(p->ap, unsigned int), 8));
 	if (*p->format == 'u')
-		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 10));
-	if (*p->format == 'x')
-		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 16));
-	if (*p->format == 'X')
-		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 16));
+		return (pf_nb_unsigned(p, va_arg(p->ap, unsigned int), 10));
+	if (*p->format == 'x' || *p->format == 'X')
+		return (pf_nb_unsigned(p, va_arg(p->ap, unsigned int), 16));
 	if (*p->format == 'f')
-		return (pf_putnbr_u(p, va_arg(p->ap, unsigned int), 10));
+		return (pf_nb_signed(p, va_arg(p->ap, double), 10));
 	if (*p->format == '%')
 		return (pf_putchar(p, '%'));
 	return (0);
@@ -100,12 +98,8 @@ static int	options(t_printf *p)
 	return (0);
 }
 
-#include <stdio.h>
-
 int		pf_parse_args(t_printf *p)
 {
-	unsigned int	ret;
-
 	p->flags = 0;
 	p->width = 0;
 	p->precision = 1;
@@ -116,8 +110,7 @@ int		pf_parse_args(t_printf *p)
 		++(p->format);
 	width_precision(p);
 	flags(p);
-	ret = (conversion(p));
-	p->width = p->width < ret ? 0 : p->width - ret;
+	conversion(p);
 	pf_padding(p, 0);
 	return (1);
 }
