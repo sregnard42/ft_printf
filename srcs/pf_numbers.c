@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 17:56:54 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/09 18:04:12 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/10 15:17:32 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,14 @@ static int	pf_nbrlen(t_printf *p, unsigned long long nb, unsigned int base)
 	len = 1;
 	if (!(p->flags & FLAG_LEFT_ALIGN) && !(p->flags & FLAG_0)
 			&& (p->flags & FLAG_NEGATIVE
-			|| (p->flags & FLAG_POSITIVE && p->flags & FLAG_PLUS)))
-		++len;
+				|| (p->flags & FLAG_POSITIVE
+					&& p->flags & FLAG_PLUS)))
+		len += 1;
+	if (!(p->flags & FLAG_0) && p->flags & FLAG_HASH && nb != 0)
+	{
+		base == 8 ? len += 1 : 0;
+		base == 16 ? len += 2 : 0;
+	}
 	while (nb >= base && ++len)
 		nb /= base;
 	return (len);
@@ -48,43 +54,74 @@ static int	pf_putnbr(t_printf *p, unsigned long long nb, unsigned int base)
 
 static int	pf_nbrpad(t_printf *p, unsigned long long nb, unsigned int base)
 {
-	char c;
+	char *c;
 
 	c = 0;
-	if (p->flags & FLAG_NEGATIVE)
-		c = '-';
-	else if (p->flags & FLAG_POSITIVE && p->flags & FLAG_PLUS)
-		c = '+';
-	else if (p->flags & FLAG_POSITIVE && p->flags & FLAG_SPACE)
-		c = ' ';
+	(p->flags & FLAG_NEGATIVE) ?  c = "-" : 0;
+	(p->flags & FLAG_POSITIVE && p->flags & FLAG_PLUS) ? c = "+" : 0;
+	(p->flags & FLAG_POSITIVE && p->flags & FLAG_SPACE) ? c = " " : 0;
+	if (p->flags & FLAG_HASH && nb != 0)
+	{
+		(base == 8) ? c = "0": 0;
+		(base == 16 && *p->format == 'x') ? c = "0x": 0;
+		(base == 16 && *p->format == 'X') ? c = "0X": 0;
+	}
 	if (p->flags & FLAG_LEFT_ALIGN)
-		c != 0 ? pf_buffer(p, &c, 1) : 0;
+		c != 0 ? pf_buffer(p, c, ft_strlen(c)) : 0;
 	else if (p->flags & FLAG_0)
 	{
-		c != 0 ? pf_buffer(p, &c, 1) : 0;
+		c != 0 ? pf_buffer(p, c, ft_strlen(c)) : 0;
 		pf_padding(p, pf_nbrlen(p, nb, base));
 	}
 	else
 	{
 		pf_padding(p, pf_nbrlen(p, nb, base));
-		c != 0 && c != ' ' ? pf_buffer(p, &c, 1) : 0;
+		c != 0 ? pf_buffer(p, c, ft_strlen(c)) : 0;
 	}
 	return (0);
 }
 
-int		pf_nb_signed(t_printf *p, long long nbr, unsigned int base)
+int		pf_nb_signed(t_printf *p)
 {
 	unsigned long long	nb;
+	long long		arg;
 
-	nb = nbr >= 0 ? nbr : -nbr;	
-	p->flags |= nbr >= 0 ? FLAG_POSITIVE : FLAG_NEGATIVE;
-	pf_nbrpad(p, nb, base);
-	return (pf_putnbr(p, nb, base));
+	if (p->flags & FLAG_CHAR)
+		arg = (char)va_arg(p->ap, int);
+	else if (p->flags & FLAG_SHORT)
+		arg = (short)va_arg(p->ap, int);
+	else if (p->flags & FLAG_LONG)
+		arg = va_arg(p->ap, long);
+	else if (p->flags & FLAG_LONG_LONG)
+		arg = va_arg(p->ap, long);
+	else
+		arg = va_arg(p->ap, int);
+	nb = arg >= 0 ? arg : -arg;	
+	p->flags |= arg >= 0 ? FLAG_POSITIVE : FLAG_NEGATIVE;
+	pf_nbrpad(p, nb, 10);
+	return (pf_putnbr(p, nb, 10));
 }
 
-int		pf_nb_unsigned(t_printf *p, unsigned long long nb,
-		unsigned int base)
+int		pf_nb_unsigned(t_printf *p)
 {
-	pf_nbrpad(p, nb, base);
-	return (pf_putnbr(p, nb, base));
+	unsigned long long	arg;
+	unsigned int		base;
+	char			c;
+
+	c = *p->format;
+	if (p->flags & FLAG_CHAR)
+		arg = (unsigned char)va_arg(p->ap, unsigned int);
+	else if (p->flags & FLAG_SHORT)
+		arg = (unsigned short)va_arg(p->ap, unsigned int);
+	else if (p->flags & FLAG_LONG || c == 'p')
+		arg = va_arg(p->ap, unsigned long);
+	else if (p->flags & FLAG_LONG_LONG)
+		arg = va_arg(p->ap, unsigned long long);
+	else
+		arg = va_arg(p->ap, unsigned int);
+	(c == 'o') ? base = 8 : 0;
+	(c == 'u' || c == 'U') ? base = 10 : 0;
+	(c == 'x' || c == 'X' || c == 'p') ? base = 16 : 0;
+	pf_nbrpad(p, arg, base);
+	return (pf_putnbr(p, arg, base));
 }

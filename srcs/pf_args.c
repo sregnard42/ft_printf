@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 15:48:27 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/09 17:16:41 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/10 15:32:56 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,21 @@
 
 static int	conversion(t_printf *p)
 {
-	if (*p->format == 'c')
+	char	c;
+
+	c = *p->format;
+	if (c == 'c')
 		return (pf_putchar(p, va_arg(p->ap, unsigned int)));
-	if (*p->format == 's')
+	if (c == 's')
 		return (pf_putstr(p, va_arg(p->ap, char *)));
-	if (*p->format == 'p')
-		return (pf_nb_unsigned(p, va_arg(p->ap, unsigned int), 16));
-	if (*p->format == 'd' || *p->format == 'i')
-		return (pf_nb_signed(p, va_arg(p->ap, int), 10));
-	if (*p->format == 'o')
-		return (pf_nb_unsigned(p, va_arg(p->ap, unsigned int), 8));
-	if (*p->format == 'u')
-		return (pf_nb_unsigned(p, va_arg(p->ap, unsigned int), 10));
-	if (*p->format == 'x' || *p->format == 'X')
-		return (pf_nb_unsigned(p, va_arg(p->ap, unsigned int), 16));
-	if (*p->format == 'f')
-		return (pf_nb_signed(p, va_arg(p->ap, double), 10));
-	if (*p->format == '%')
+	if (c == 'd' || c == 'i')
+		return (pf_nb_signed(p));
+	if (c == 'o' || c == 'u' || c == 'x' || c == 'X' || c == 'p'
+			|| c == 'U')
+		return (pf_nb_unsigned(p));
+	if (c == 'f')
+		return (pf_nb_signed(p));
+	if (c == '%')
 		return (pf_putchar(p, '%'));
 	return (0);
 }
@@ -68,15 +66,16 @@ static int	width_precision(t_printf *p)
 {
 	if (*p->format >= '1' && *p->format <= '9')
 	{
-		p->width = ft_atoi(p->format++);
+		p->width = pf_atoi(p->format++);
 		p->flags |= FLAG_WIDTH;
 		while (*p->format >= '0' && *p->format <= '9')
 			++(p->format);
 	}
 	if (*p->format == '.')
 	{
-		p->precision = ft_atoi(++p->format);
+		p->precision = pf_atoi(++p->format);
 		p->flags |= FLAG_PRECISION;
+		p->flags *= FLAG_0;
 		while (*p->format >= '0' && *p->format <= '9')
 			++(p->format);
 	}
@@ -88,13 +87,27 @@ static int	options(t_printf *p)
 	if (*p->format == '#')
 		return (p->flags |= FLAG_HASH);
 	if (*p->format == '+')
+	{
+		p->flags & FLAG_SPACE ? p->flags *= FLAG_SPACE : 0;
 		return (p->flags |= FLAG_PLUS);
+	}
 	if (*p->format == ' ')
+	{
+		if (p->flags & FLAG_PLUS)
+			return (1);
 		return (p->flags |= FLAG_SPACE);
+	}
 	if (*p->format == '-') 
+	{
+		p->flags & FLAG_0 ? p->flags *= FLAG_0 : 0;
 		return (p->flags |= FLAG_LEFT_ALIGN);
+	}
 	if (*p->format == '0')
+	{
+		if (p->flags & FLAG_LEFT_ALIGN)
+			return (1);
 		return (p->flags |= FLAG_0);
+	}
 	return (0);
 }
 
@@ -102,7 +115,7 @@ int		pf_parse_args(t_printf *p)
 {
 	p->flags = 0;
 	p->width = 0;
-	p->precision = 1;
+	p->precision = 0;
 	++(p->format);
 	if (*p->format == '%')
 		return (pf_putchar(p, '%'));
