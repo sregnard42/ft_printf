@@ -1,31 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pf_chars.c                                         :+:      :+:    :+:   */
+/*   pf_floats.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/08 17:59:04 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/10 16:34:02 by sregnard         ###   ########.fr       */
+/*   Created: 2019/02/10 15:51:07 by sregnard          #+#    #+#             */
+/*   Updated: 2019/02/10 15:57:03 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	pf_putchar(t_printf *p, const char c)
+int	pf_ftoa(t_printf *p, double nb)
 {
-	pf_padding(p, 1);
-	return (pf_buffer(p, &c, 1));
-}
-
-int	pf_putstr(t_printf *p, const char *s)
-{
-	size_t	len;
-	if (!s)
-		s = "(null)";
-	len = ft_strlen(s);
-	if (p->flags & FLAG_PRECISION)
-		p->precision < len ? len = p->precision : 0;
-	pf_padding(p, len);
-	return (pf_buffer(p, s, len));
+	
 }
