@@ -6,7 +6,7 @@
 #    By: sregnard <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/07 14:51:18 by sregnard          #+#    #+#              #
-#    Updated: 2019/02/08 18:01:43 by sregnard         ###   ########.fr        #
+#    Updated: 2019/02/10 15:31:37 by sregnard         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ SRCDIR			=	srcs/
 SRCNAME			= 	ft_printf.c \
 				pf_args.c \
 				pf_numbers.c \
-				pf_chars.c
+				pf_chars.c \
+				pf_atoi.c
 SRC			=	$(addprefix $(SRCDIR), $(SRCNAME))
 
 OBJDIR			=	objs/
