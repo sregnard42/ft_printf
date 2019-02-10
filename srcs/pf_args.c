@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 15:48:27 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/10 18:35:26 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/10 19:24:28 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,9 @@ static int	width_precision(t_printf *p)
 	{
 		p->precision = pf_atoi(++p->format);
 		p->flags |= FLAG_PRECISION;
-		p->flags & FLAG_0 ? p->flags *= FLAG_0 : 0;
+		p->flags & FLAG_0 ? p->flags &= ~FLAG_0 : 0;
+		if (p->flags & FLAG_0)
+			ft_putendl("FLAG_0 STILL ON !");
 		while (*p->format >= '0' && *p->format <= '9')
 			++(p->format);
 	}
@@ -88,7 +90,7 @@ static int	options(t_printf *p)
 		return (p->flags |= FLAG_HASH);
 	if (*p->format == '+')
 	{
-		p->flags & FLAG_SPACE ? p->flags *= FLAG_SPACE : 0;
+		p->flags & FLAG_SPACE ? p->flags &= ~FLAG_SPACE : 0;
 		return (p->flags |= FLAG_PLUS);
 	}
 	if (*p->format == ' ')
@@ -99,7 +101,7 @@ static int	options(t_printf *p)
 	}
 	if (*p->format == '-') 
 	{
-		p->flags & FLAG_0 ? p->flags *= FLAG_0 : 0;
+		p->flags & FLAG_0 ? p->flags &= ~FLAG_0 : 0;
 		return (p->flags |= FLAG_LEFT_ALIGN);
 	}
 	if (*p->format == '0')

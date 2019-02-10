@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 17:56:54 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/10 19:13:44 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/10 19:58:25 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static int	pf_nbrlen(t_printf *p, unsigned long long nb, unsigned int base)
 	(p->precision >= len) ? (p->precision -= len) : (p->precision = 0);
 	len += p->precision;
 	if (!(p->flags & FLAG_LEFT_ALIGN) && !(p->flags & FLAG_0))
-		if ((p->flags & FLAG_PLUS && p->flags & FLAG_POSITIVE)
+		if (((p->flags & FLAG_PLUS || p->flags & FLAG_SPACE) 
+					&& p->flags & FLAG_POSITIVE)
 				|| p->flags & FLAG_NEGATIVE)
 			len += 1;
 	if (!(p->flags & FLAG_0) && p->flags & FLAG_HASH && nb != 0)
@@ -125,10 +126,12 @@ int		pf_nb_unsigned(t_printf *p)
 		arg = (unsigned char)va_arg(p->ap, unsigned int);
 	else if (p->flags & FLAG_SHORT)
 		arg = (unsigned short)va_arg(p->ap, unsigned int);
-	else if (p->flags & FLAG_LONG || c == 'p')
+	else if (p->flags & FLAG_LONG)
 		arg = va_arg(p->ap, unsigned long);
 	else if (p->flags & FLAG_LONG_LONG)
 		arg = va_arg(p->ap, unsigned long long);
+	else if (c == 'p')
+		arg = (unsigned long long)va_arg(p->ap, void *);
 	else
 		arg = va_arg(p->ap, unsigned int);
 	(c == 'o') ? base = 8 : 0;
