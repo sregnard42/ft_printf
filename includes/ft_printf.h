@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:20:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/11 14:15:49 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/11 17:42:33 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <float.h>
 
 #define PF_BUFF_SIZE	256
 
@@ -104,7 +105,8 @@ int		pf_floats(t_printf *p);
 */
 
 unsigned int	pf_atoi(const char *s);
-unsigned int	pf_itoa(t_printf *p, long long unsigned nb);
+unsigned int	pf_itoa(t_printf *p, long double nb);
+unsigned int	pf_add_zeros(t_printf *p, long double nb);
 
 /*
 **	----------------------------------------------------------------------
