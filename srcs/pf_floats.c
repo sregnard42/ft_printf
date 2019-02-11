@@ -6,13 +6,13 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:51:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/11 15:19:00 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/11 17:45:23 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	pf_nbrlen(t_printf *p, long long unsigned nb)
+static int	pf_nbrlen(t_printf *p, long double nb)
 {
 	int		len;
 
@@ -35,12 +35,15 @@ static int	pf_precision(t_printf *p, long double nb)
 
 	if (p->precision == 0)
 		return (0);
-	nb -= (long long)nb;
+	nb -= (unsigned long long)nb;
+	pf_buffer(p, ".", 1);
+	p->precision -= pf_add_zeros(p, nb);
 	i = 0;
 	while (i++ < p->precision)
 		nb *= 10;
-	pf_buffer(p, ".", 1);
-	i = pf_itoa(p, (long long unsigned)nb);
+	if (nb - (unsigned long long)nb >= 0.5)
+		nb += 1;
+	i = pf_itoa(p, nb);
 	while (i++ < p->precision)
 		pf_buffer(p, "0", 1);
 	return (0);
@@ -48,20 +51,18 @@ static int	pf_precision(t_printf *p, long double nb)
 
 static int	pf_ftoa(t_printf *p, long double nb)
 {
-	long long unsigned nbr;
 	size_t	len;
 
-	(nb >= 0) ? (nbr = nb) : (nbr = -nb);
 	if (p->flags & FLAG_LEFT_ALIGN)
-		len = pf_nbrlen(p, nbr);
-	pf_itoa(p, nbr);
+		len = pf_nbrlen(p, nb);
+	pf_itoa(p, nb);
 	pf_precision(p, nb);
 	if (p->flags & FLAG_LEFT_ALIGN)
 		return (pf_padding(p, len));
 	return (0);
 }
 
-static int	pf_nbrpad(t_printf *p, long long unsigned nb)
+static int	pf_nbrpad(t_printf *p, long double nb)
 {
 	char *c;
 
@@ -87,14 +88,15 @@ static int	pf_nbrpad(t_printf *p, long long unsigned nb)
 int		pf_floats(t_printf *p)
 {
 	long double		nb;
-	long long unsigned	nbr;
 
 	if (p->flags & FLAG_LONG_DOUBLE)
 		nb = va_arg(p->ap, long double);
 	else
 		nb = va_arg(p->ap, double);
-	(nb >= 0) ? (nbr = nb) : (nbr = -nb);
-	(nb >= 0) ? (p->flags |= FLAG_POSITIVE) : (p->flags |= FLAG_NEGATIVE);
-	pf_nbrpad(p, nbr);
+	if (nb == LDBL_MAX)
+		return (pf_putstr(p, "inf"));
+	(nb < 0) ? (p->flags |= FLAG_NEGATIVE) : (p->flags |= FLAG_POSITIVE);
+	(nb < 0) ? (nb = -nb) : 0;
+	pf_nbrpad(p, nb);
 	return (pf_ftoa(p, nb));
 }
