@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 15:48:27 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/10 19:24:28 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/11 15:11:48 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	conversion(t_printf *p)
 			|| c == 'U')
 		return (pf_nb_unsigned(p));
 	if (c == 'f')
-		return (pf_nb_signed(p));
+		return (pf_floats(p));
 	if (c == '%')
 		return (pf_putchar(p, '%'));
 	return (0);
@@ -75,9 +75,6 @@ static int	width_precision(t_printf *p)
 	{
 		p->precision = pf_atoi(++p->format);
 		p->flags |= FLAG_PRECISION;
-		p->flags & FLAG_0 ? p->flags &= ~FLAG_0 : 0;
-		if (p->flags & FLAG_0)
-			ft_putendl("FLAG_0 STILL ON !");
 		while (*p->format >= '0' && *p->format <= '9')
 			++(p->format);
 	}

@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 17:56:54 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/10 19:58:25 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/11 15:11:01 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ static int	pf_putnbr(t_printf *p, unsigned long long nb, unsigned int base)
 	else
 		c = nb - 10 + 'a';
 	pf_buffer(p, &c, 1);
-	nb /= base;
 	if (p->flags & FLAG_LEFT_ALIGN)
 		return (pf_padding(p, len));
 	return (0);
@@ -99,6 +98,7 @@ int		pf_nb_signed(t_printf *p)
 	unsigned long long	nb;
 	long long		arg;
 
+	p->flags & FLAG_PRECISION ? p->flags &= ~FLAG_0 : 0;
 	if (p->flags & FLAG_CHAR)
 		arg = (char)va_arg(p->ap, int);
 	else if (p->flags & FLAG_SHORT)
@@ -121,6 +121,7 @@ int		pf_nb_unsigned(t_printf *p)
 	unsigned int		base;
 	char			c;
 
+	p->flags & FLAG_PRECISION ? p->flags &= ~FLAG_0 : 0;
 	c = *p->format;
 	if (p->flags & FLAG_CHAR)
 		arg = (unsigned char)va_arg(p->ap, unsigned int);
