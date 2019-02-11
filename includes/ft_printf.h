@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:20:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/10 15:32:30 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/11 14:15:49 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ enum	e_printf_flags
 
 /*
 **	----------------------------------------------------------------------
+**	ft_printf.c
 */
 
 int		ft_printf(const char *format, ...);
@@ -69,12 +70,14 @@ int		pf_padding(t_printf *p, size_t len);
 
 /*
 **	----------------------------------------------------------------------
+**	ft_args.c
 */
 
 int		pf_parse_args(t_printf *p);
 
 /*
 **	----------------------------------------------------------------------
+**	ft_chars.c
 */
 
 int 		pf_putchar(t_printf *p, const char c);
@@ -82,6 +85,7 @@ int		pf_putstr(t_printf *p, const char *s);
 
 /*
 **	----------------------------------------------------------------------
+**	ft_numbers.c
 */
 
 int		pf_nb_signed(t_printf *p);
@@ -89,7 +93,21 @@ int		pf_nb_unsigned(t_printf *p);
 
 /*
 **	----------------------------------------------------------------------
+**	ft_floats.c
+*/
+
+int		pf_floats(t_printf *p);
+
+/*
+**	----------------------------------------------------------------------
+**	ft_utils.c
 */
 
 unsigned int	pf_atoi(const char *s);
+unsigned int	pf_itoa(t_printf *p, long long unsigned nb);
+
+/*
+**	----------------------------------------------------------------------
+*/
+
 #endif
