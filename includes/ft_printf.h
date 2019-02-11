@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:20:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/11 17:42:33 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/11 18:18:37 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <float.h>
+#include <limits.h>
 
 #define PF_BUFF_SIZE	256
 
