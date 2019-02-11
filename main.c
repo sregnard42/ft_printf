@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:26:00 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/11 17:51:57 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/11 19:17:38 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ int	main(int ac, char **av)
 
 	i = 0;
 
-	d = LDBL_MAX;
+	d = 4.3f / 2.3f;
 	printf("\nTest #%d :\n", ++i);
 	printf("| %-10s |\n", "printf");
-	printf("%.0p, %.p", 0, 0);
+	printf("| %-10Lf |", d);
 	printf("\n");
 	ft_printf("| %-10s |\n", "ft_printf");
-	ft_printf("%.0p, %.p", 0, 0);
+	ft_printf("| %-10Lf |", d);
 	ft_printf("\n");
 	return (0);
 }
