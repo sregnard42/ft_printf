@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:51:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/11 15:04:34 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/11 15:19:00 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,29 +27,6 @@ static int	pf_nbrlen(t_printf *p, long long unsigned nb)
 				|| p->flags & FLAG_NEGATIVE)
 			len += 1;
 	return (len);
-}
-
-static int	pf_nbrpad(t_printf *p, long long unsigned nb)
-{
-	char *c;
-
-	c = 0;
-	(p->flags & FLAG_NEGATIVE) ?  c = "-" : 0;
-	(p->flags & FLAG_POSITIVE && p->flags & FLAG_PLUS) ? c = "+" : 0;
-	(p->flags & FLAG_POSITIVE && p->flags & FLAG_SPACE) ? c = " " : 0;
-	if (p->flags & FLAG_LEFT_ALIGN)
-		c != 0 ? pf_buffer(p, c, ft_strlen(c)) : 0;
-	else if (p->flags & FLAG_0)
-	{
-		c != 0 ? pf_buffer(p, c, ft_strlen(c)) : 0;
-		pf_padding(p, pf_nbrlen(p, nb));
-	}
-	else
-	{
-		pf_padding(p, pf_nbrlen(p, nb));
-		c != 0 ? pf_buffer(p, c, ft_strlen(c)) : 0;
-	}
-	return (0);
 }
 
 static int	pf_precision(t_printf *p, long double nb)
@@ -81,6 +58,29 @@ static int	pf_ftoa(t_printf *p, long double nb)
 	pf_precision(p, nb);
 	if (p->flags & FLAG_LEFT_ALIGN)
 		return (pf_padding(p, len));
+	return (0);
+}
+
+static int	pf_nbrpad(t_printf *p, long long unsigned nb)
+{
+	char *c;
+
+	c = 0;
+	(p->flags & FLAG_NEGATIVE) ?  c = "-" : 0;
+	(p->flags & FLAG_POSITIVE && p->flags & FLAG_PLUS) ? c = "+" : 0;
+	(p->flags & FLAG_POSITIVE && p->flags & FLAG_SPACE) ? c = " " : 0;
+	if (p->flags & FLAG_LEFT_ALIGN)
+		c != 0 ? pf_buffer(p, c, ft_strlen(c)) : 0;
+	else if (p->flags & FLAG_0)
+	{
+		c != 0 ? pf_buffer(p, c, ft_strlen(c)) : 0;
+		pf_padding(p, pf_nbrlen(p, nb));
+	}
+	else
+	{
+		pf_padding(p, pf_nbrlen(p, nb));
+		c != 0 ? pf_buffer(p, c, ft_strlen(c)) : 0;
+	}
 	return (0);
 }
 
