@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:29:54 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/11 18:37:36 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/13 15:50:55 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@ unsigned int	pf_atoi(const char *s)
 
 	nb = 0;
 	while (ft_isdigit(*s))
-			nb = nb * 10 + *s++ - '0';
+		nb = nb * 10 + *s++ - '0';
 	return (nb);
 }
 
-unsigned int pf_itoa(t_printf *p, long double nbr)
+unsigned int	pf_itoa(t_printf *p, long double nbr)
 {
-	long long unsigned nb;
-	size_t	len;
-	char	c;
+	long long unsigned	nb;
+	size_t				len;
+	char				c;
 
 	nb = nbr;
 	len = 0;
@@ -38,15 +38,28 @@ unsigned int pf_itoa(t_printf *p, long double nbr)
 	return (len);
 }
 
-unsigned int	pf_add_zeros(t_printf *p, long double nb)
+char			*pf_prefix(t_printf *p, long double nb, unsigned int base)
 {
-	size_t	len;
-
-	len = 0;
-	while (nb > 0 && nb < 0.1f && ++len < p->precision)
+	if (p->flags & FLAG_NEGATIVE)
+		return ("-");
+	if (p->flags & FLAG_POSITIVE && p->flags & FLAG_PLUS)
+		return ("+");
+	if (p->flags & FLAG_POSITIVE && p->flags & FLAG_SPACE)
+		return (" ");
+	if (*p->format == 'f')
+		return (0);
+	if (*p->format == 'p')
+		return ("0x");
+	if (p->flags & FLAG_HASH && base == 8
+			&& ((p->flags & FLAG_PRECISION && p->precision == 0)
+			|| !(p->flags & FLAG_PRECISION)))
+		return ("0");
+	if ((p->flags & FLAG_HASH && base == 16 && nb != 0))
 	{
-		nb *= 10;
-		pf_buffer(p, "0", 1);
+		if (*p->format == 'x')
+			return ("0x");
+		if (*p->format == 'X')
+			return ("0X");
 	}
-	return (len);
+	return (0);
 }

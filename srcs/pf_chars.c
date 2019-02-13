@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 17:59:04 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/10 16:34:02 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/13 12:56:07 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	pf_putchar(t_printf *p, const char c)
 int	pf_putstr(t_printf *p, const char *s)
 {
 	size_t	len;
+
 	if (!s)
 		s = "(null)";
 	len = ft_strlen(s);

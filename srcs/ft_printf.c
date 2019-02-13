@@ -6,13 +6,13 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:23:36 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/10 16:17:26 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/13 12:56:57 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	pf_padding(t_printf *p, size_t len)
+int		pf_padding(t_printf *p, size_t len)
 {
 	char	c;
 
@@ -51,10 +51,10 @@ int		pf_buffer(t_printf *p, const char *s, size_t len)
 	}
 	if (i < len)
 		pf_buffer(p, s + i, len - i);
-	return (len);	
+	return (len);
 }
 
-int			ft_printf(const char *format, ...)
+int		ft_printf(const char *format, ...)
 {
 	t_printf	p;
 
@@ -63,7 +63,6 @@ int			ft_printf(const char *format, ...)
 	va_start(p.ap, format);
 	while (p.format && *p.format)
 	{
-
 		while (p.format && *p.format && *p.format != '%')
 			p.buf[p.index++] = *p.format++;
 		if (p.format && *p.format && *p.format == '%')

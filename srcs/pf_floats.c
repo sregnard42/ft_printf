@@ -6,30 +6,25 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:51:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/11 19:14:40 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/13 15:22:40 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	pf_nbrlen(t_printf *p, long double nb)
+static int	pf_add_zeros(t_printf *p, long double nb)
 {
-	int		len;
+	size_t	len;
 
-	len = 1;
-	while (nb >= 10 && ++len)
-		nb /= 10;
-	!(p->flags & FLAG_PRECISION) ? p->precision = 6 : 0;
-	len += (p->precision == 0) ? 0 : p->precision + 1;
-	if (!(p->flags & FLAG_LEFT_ALIGN) && !(p->flags & FLAG_0))
-		if (((p->flags & FLAG_PLUS || p->flags & FLAG_SPACE) 
-					&& p->flags & FLAG_POSITIVE)
-				|| p->flags & FLAG_NEGATIVE)
-			len += 1;
+	len = 0;
+	while (nb > 0 && nb < 0.1f && ++len < p->precision)
+	{
+		nb *= 10;
+		pf_buffer(p, "0", 1);
+	}
 	return (len);
 }
 
-#include <stdio.h>
 static int	pf_precision(t_printf *p, long double nb)
 {
 	size_t	i;
@@ -56,7 +51,7 @@ static int	pf_ftoa(t_printf *p, long double nb)
 	size_t	len;
 
 	if (p->flags & FLAG_LEFT_ALIGN)
-		len = pf_nbrlen(p, nb);
+		len = pf_nbrlen(p, nb, 10);
 	pf_itoa(p, nb);
 	pf_precision(p, nb);
 	if (p->flags & FLAG_LEFT_ALIGN)
@@ -64,30 +59,7 @@ static int	pf_ftoa(t_printf *p, long double nb)
 	return (0);
 }
 
-static int	pf_nbrpad(t_printf *p, long double nb)
-{
-	char *c;
-
-	c = 0;
-	(p->flags & FLAG_NEGATIVE) ?  c = "-" : 0;
-	(p->flags & FLAG_POSITIVE && p->flags & FLAG_PLUS) ? c = "+" : 0;
-	(p->flags & FLAG_POSITIVE && p->flags & FLAG_SPACE) ? c = " " : 0;
-	if (p->flags & FLAG_LEFT_ALIGN)
-		c != 0 ? pf_buffer(p, c, ft_strlen(c)) : 0;
-	else if (p->flags & FLAG_0)
-	{
-		c != 0 ? pf_buffer(p, c, ft_strlen(c)) : 0;
-		pf_padding(p, pf_nbrlen(p, nb));
-	}
-	else
-	{
-		pf_padding(p, pf_nbrlen(p, nb));
-		c != 0 ? pf_buffer(p, c, ft_strlen(c)) : 0;
-	}
-	return (0);
-}
-
-int		pf_floats(t_printf *p)
+int			pf_floats(t_printf *p)
 {
 	long double		nb;
 
@@ -102,6 +74,6 @@ int		pf_floats(t_printf *p)
 	}
 	(nb < 0) ? (p->flags |= FLAG_NEGATIVE) : (p->flags |= FLAG_POSITIVE);
 	(nb < 0) ? (nb = -nb) : 0;
-	pf_nbrpad(p, nb);
+	pf_nbrpad(p, nb, 10);
 	return (pf_ftoa(p, nb));
 }
