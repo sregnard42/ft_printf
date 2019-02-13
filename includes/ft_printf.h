@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:20:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/13 15:18:30 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/13 16:11:03 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,10 @@ enum				e_printf_flags
 	FLAG_FLOAT = (1 << 12),
 	FLAG_DOUBLE = (1 << 13),
 	FLAG_LONG_DOUBLE = (1 << 14),
-	FLAG_NEGATIVE = (1 << 15),
-	FLAG_POSITIVE = (1 << 16),
+	FLAG_INTMAX_T = (1 << 15),
+	FLAG_SIZE_T = (1 << 16),
+	FLAG_NEGATIVE = (1 << 17),
+	FLAG_POSITIVE = (1 << 18),
 };
 
 /*
@@ -108,8 +110,10 @@ int					pf_floats(t_printf *p);
 **	ft_utils.c
 */
 
+unsigned int		pf_base(const char c);
 unsigned int		pf_atoi(const char *s);
 unsigned int		pf_itoa(t_printf *p, long double nb);
 char				*pf_prefix(t_printf *p, long double nb, unsigned int base);
+int					pf_flags_extra(t_printf *p);
 
 #endif
