@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:26:00 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/13 16:16:38 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/13 21:02:26 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@
 
 int	main(int ac, char **av)
 {
-	unsigned int	i;
+	int		i;
 	unsigned long	u;
-	long double		d;
+	long double	d;
 
 	i = 0;
-	d = 4.3f / 2.3f;
-	printf("\nTest #%d %%#o:\n", ++i);
+	d = ULLONG_MAX + 1;
+	printf("\nTest #%d :\n", ++i);
 	printf("| %-10s |\n", "printf");
-	printf("%#o", 0);
+	printf("%010.1Lf", d);
 	printf("\n");
 	ft_printf("| %-10s |\n", "ft_printf");
-	ft_printf("%#o", 0);
+	ft_printf("%010.1Lf", d);
 	ft_printf("\n");
 	return (0);
 }
