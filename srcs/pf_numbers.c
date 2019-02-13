@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 17:56:54 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/13 15:42:33 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/13 16:11:18 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,11 @@ int			pf_nb_signed(t_printf *p)
 	else if (p->flags & FLAG_LONG)
 		arg = va_arg(p->ap, long);
 	else if (p->flags & FLAG_LONG_LONG)
-		arg = va_arg(p->ap, long);
+		arg = va_arg(p->ap, long long);
+	else if (p->flags & FLAG_INTMAX_T)
+		arg = va_arg(p->ap, intmax_t);
+	else if (p->flags & FLAG_SIZE_T)
+		arg = va_arg(p->ap, ssize_t);
 	else
 		arg = va_arg(p->ap, int);
 	nb = arg >= 0 ? arg : -arg;
@@ -115,11 +119,13 @@ int			pf_nb_unsigned(t_printf *p)
 		arg = va_arg(p->ap, unsigned long long);
 	else if (c == 'p')
 		arg = (unsigned long long)va_arg(p->ap, void *);
+	else if (p->flags & FLAG_INTMAX_T)
+		arg = va_arg(p->ap, uintmax_t);
+	else if (p->flags & FLAG_SIZE_T)
+		arg = va_arg(p->ap, size_t);
 	else
 		arg = va_arg(p->ap, unsigned int);
-	(c == 'o' || c == 'O') ? base = 8 : 0;
-	(c == 'u' || c == 'U') ? base = 10 : 0;
-	(c == 'x' || c == 'X' || c == 'p') ? base = 16 : 0;
+	base = pf_base(c);
 	pf_nbrpad(p, arg, base);
 	return (pf_putnbr(p, arg, base));
 }

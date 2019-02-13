@@ -6,13 +6,13 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 15:48:27 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/13 13:44:09 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/13 16:04:46 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	conversion(t_printf *p)
+static int	pf_conversion(t_printf *p)
 {
 	char	c;
 
@@ -23,8 +23,8 @@ static int	conversion(t_printf *p)
 		return (pf_putstr(p, va_arg(p->ap, char *)));
 	if (c == 'd' || c == 'i')
 		return (pf_nb_signed(p));
-	if (c == 'o' || c == 'O' || c == 'u' || c == 'x' || c == 'X' || c == 'p'
-			|| c == 'U')
+	if (c == 'o' || c == 'O' || c == 'u' || c == 'U' || c == 'x' || c == 'X'
+			|| c == 'p')
 		return (pf_nb_unsigned(p));
 	if (c == 'f')
 		return (pf_floats(p));
@@ -35,7 +35,7 @@ static int	conversion(t_printf *p)
 	return (0);
 }
 
-static int	flags(t_printf *p)
+static int	pf_flags(t_printf *p)
 {
 	if (*p->format == 'h')
 	{
@@ -60,10 +60,10 @@ static int	flags(t_printf *p)
 		++p->format;
 		return (p->flags |= FLAG_LONG_DOUBLE);
 	}
-	return (0);
+	return (pf_flags_extra(p));
 }
 
-static int	width_precision(t_printf *p)
+static int	pf_width_precision(t_printf *p)
 {
 	if (*p->format >= '1' && *p->format <= '9')
 	{
@@ -82,7 +82,7 @@ static int	width_precision(t_printf *p)
 	return (1);
 }
 
-static int	options(t_printf *p)
+static int	pf_options(t_printf *p)
 {
 	if (*p->format == '#')
 		return (p->flags |= FLAG_HASH);
@@ -119,11 +119,11 @@ int			pf_parse_args(t_printf *p)
 	++(p->format);
 	if (*p->format == '%')
 		return (pf_putchar(p, '%'));
-	while (options(p))
+	while (pf_options(p))
 		++(p->format);
-	width_precision(p);
-	flags(p);
-	conversion(p);
+	pf_width_precision(p);
+	pf_flags(p);
+	pf_conversion(p);
 	pf_padding(p, 0);
 	return (1);
 }
