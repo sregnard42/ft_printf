@@ -6,20 +6,21 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/27 17:20:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/11 18:18:37 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/13 15:18:30 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
-#include "../libft/includes/libft.h"
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <float.h>
-#include <limits.h>
+# include "../libft/includes/libft.h"
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdarg.h>
+# include <float.h>
+# include <limits.h>
 
-#define PF_BUFF_SIZE	256
+# define PF_BUFF_SIZE	256
 
 /*
 **	----------------------------------------------------------------------
@@ -27,21 +28,21 @@
 
 typedef struct		s_printf
 {
-	char		*format;
-	va_list		ap;
-	char		buf[PF_BUFF_SIZE];
+	char			*format;
+	va_list			ap;
+	char			buf[PF_BUFF_SIZE];
 	unsigned int	index;
 	unsigned int	flags;
 	unsigned int	width;
 	unsigned int	precision;
 	unsigned int	written;
-}			t_printf;
+}					t_printf;
 
 /*
 **	----------------------------------------------------------------------
 */
 
-enum	e_printf_flags
+enum				e_printf_flags
 {
 	FLAG_0 = (1 << 0),
 	FLAG_LEFT_ALIGN = (1 << 2),
@@ -66,51 +67,49 @@ enum	e_printf_flags
 **	ft_printf.c
 */
 
-int		ft_printf(const char *format, ...);
-int		pf_buffer(t_printf *p, const char *s, size_t len);
-int		pf_padding(t_printf *p, size_t len);
+int					ft_printf(const char *format, ...);
+int					pf_buffer(t_printf *p, const char *s, size_t len);
+int					pf_padding(t_printf *p, size_t len);
 
 /*
 **	----------------------------------------------------------------------
 **	ft_args.c
 */
 
-int		pf_parse_args(t_printf *p);
+int					pf_parse_args(t_printf *p);
 
 /*
 **	----------------------------------------------------------------------
 **	ft_chars.c
 */
 
-int 		pf_putchar(t_printf *p, const char c);
-int		pf_putstr(t_printf *p, const char *s);
+int					pf_putchar(t_printf *p, const char c);
+int					pf_putstr(t_printf *p, const char *s);
 
 /*
 **	----------------------------------------------------------------------
 **	ft_numbers.c
 */
 
-int		pf_nb_signed(t_printf *p);
-int		pf_nb_unsigned(t_printf *p);
+int					pf_nb_signed(t_printf *p);
+int					pf_nb_unsigned(t_printf *p);
+int					pf_nbrlen(t_printf *p, long double nb, unsigned int base);
+int					pf_nbrpad(t_printf *p, long double nb, unsigned int base);
 
 /*
 **	----------------------------------------------------------------------
 **	ft_floats.c
 */
 
-int		pf_floats(t_printf *p);
+int					pf_floats(t_printf *p);
 
 /*
 **	----------------------------------------------------------------------
 **	ft_utils.c
 */
 
-unsigned int	pf_atoi(const char *s);
-unsigned int	pf_itoa(t_printf *p, long double nb);
-unsigned int	pf_add_zeros(t_printf *p, long double nb);
-
-/*
-**	----------------------------------------------------------------------
-*/
+unsigned int		pf_atoi(const char *s);
+unsigned int		pf_itoa(t_printf *p, long double nb);
+char				*pf_prefix(t_printf *p, long double nb, unsigned int base);
 
 #endif
