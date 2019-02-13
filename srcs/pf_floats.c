@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:51:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/13 15:22:40 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/13 21:02:15 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	pf_add_zeros(t_printf *p, long double nb)
 	size_t	len;
 
 	len = 0;
-	while (nb > 0 && nb < 0.1f && ++len < p->precision)
+	while (nb != LDBL_MIN && nb > 0 && nb < 0.1f && ++len < p->precision)
 	{
 		nb *= 10;
 		pf_buffer(p, "0", 1);
@@ -63,17 +63,21 @@ int			pf_floats(t_printf *p)
 {
 	long double		nb;
 
+	!(p->flags & FLAG_PRECISION) ? p->precision = 6 : 0;
 	if (p->flags & FLAG_LONG_DOUBLE)
 		nb = va_arg(p->ap, long double);
 	else
 		nb = va_arg(p->ap, double);
-	if (nb == LDBL_MAX)
-	{
-		p->flags &= ~FLAG_PRECISION;
-		return (pf_putstr(p, "inf"));
-	}
 	(nb < 0) ? (p->flags |= FLAG_NEGATIVE) : (p->flags |= FLAG_POSITIVE);
 	(nb < 0) ? (nb = -nb) : 0;
+	if (nb >= ULLONG_MAX)
+	{
+		p->flags &= ~FLAG_PRECISION;
+		p->flags &= ~FLAG_0;
+		if (p->flags & FLAG_POSITIVE)
+			return (pf_putstr(p, "inf"));
+		return (pf_putstr(p, "-inf"));
+	}
 	pf_nbrpad(p, nb, 10);
 	return (pf_ftoa(p, nb));
 }

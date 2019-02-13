@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 17:56:54 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/13 16:11:18 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/13 19:06:14 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ int			pf_nbrlen(t_printf *p, long double nb, unsigned int base)
 	len = 1;
 	while (nb >= base && ++len)
 		nb /= base;
-	(p->precision >= len) ? (p->precision -= len) : (p->precision = 0);
+	if (*p->format == 'f')
+		(p->precision >= 1) ? ++len : 0;
+	else
+		(p->precision >= len) ? (p->precision -= len) : (p->precision = 0);
 	len += p->precision;
 	return (len);
 }
@@ -35,7 +38,8 @@ int			pf_nbrpad(t_printf *p, long double nb, unsigned int base)
 	len = ft_strlen(c);
 	if (p->flags & FLAG_LEFT_ALIGN)
 		c != 0 ? pf_buffer(p, c, len) : 0;
-	else if (p->flags & FLAG_0 && !(p->flags & FLAG_PRECISION))
+	else if (p->flags & FLAG_0 && (!(p->flags & FLAG_PRECISION)
+				|| *p->format == 'f'))
 	{
 		c != 0 ? pf_buffer(p, c, len) : 0;
 		pf_padding(p, pf_nbrlen(p, nb, base));
