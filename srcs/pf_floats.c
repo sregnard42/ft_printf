@@ -6,7 +6,7 @@
 /*   By: sregnard <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/10 15:51:07 by sregnard          #+#    #+#             */
-/*   Updated: 2019/02/13 21:02:15 by sregnard         ###   ########.fr       */
+/*   Updated: 2019/02/15 12:40:22 by sregnard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	pf_add_zeros(t_printf *p, long double nb)
 	size_t	len;
 
 	len = 0;
-	while (nb != LDBL_MIN && nb > 0 && nb < 0.1f && ++len < p->precision)
+	while (nb > 0.0f && nb < 0.1f && ++len < p->precision)
 	{
 		nb *= 10;
 		pf_buffer(p, "0", 1);
